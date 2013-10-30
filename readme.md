@@ -11,8 +11,7 @@ Here are the steps:
 
 So...
 
-1. Ask user for phone number.
-
+1. Ask user for phone number.  
 We simply create a simple form for this. (You may have your own number form field buried in a bigger form.)
 
         <!DOCTYPE HTML> 
@@ -29,7 +28,6 @@ We simply create a simple form for this. (You may have your own number form fiel
             </form>
         </body>
         </html>
-
 
 2. Generate a random PIN and send to number via voice call.
 
