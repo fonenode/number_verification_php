@@ -1,8 +1,8 @@
 <?php
 // We will be storing the pin in session
 session_start();
-define("AUTH_ID", "__your_id_here__");
-define("AUTH_SECRET", "__your_secret_here__");
+require 'lib/fonenode.php';
+$fonenode = new fonenode('__auth_id___', '__auth_key___');
 
 if ($_POST) {
     $to = $_POST['number'];
@@ -15,32 +15,15 @@ if ($_POST) {
     // Generate pin - random number between 1000 and 9999
     $_SESSION['pin'] = mt_rand(1000, 9999);
     // Space pad the pin so that it's clear over voice
-    $pin = preg_replace('|([0-9])|', '$1. ', $_SESSION['pin']);
     // Assuming our pin is 1234, this gives 1. 2. 3. 4.
-    
-    $data = array(
-        'to' => $to,
-        'text' => "Your pin is. $pin. Again, your pin is. $pin. Thank you."
-    );
-    
+    $pin = preg_replace('|([0-9])|', '$1. ', $_SESSION['pin']);
+	$text = "Your pin is. $pin. Again, your pin is. $pin. Thank you.";
+	
     // Now lets call user using fonenode's quick call API
     // http://fonenode.com/docs#calls-quick
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-    curl_setopt($ch, CURLOPT_URL, "http://api.fonenode.com/v1/calls/quick");
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_USERPWD, AUTH_ID.':'.AUTH_SECRET);
-    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-
-    $response = curl_exec($ch);
-    $json = json_decode($response, true);
-    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    
-    //print_r($response);
+	$json = $fonenode->quick_call($to, $text);
+    $status = $fonenode->getStatusCode();
+    //print_r($json);
     
     if ($status == 200) {
         /*
