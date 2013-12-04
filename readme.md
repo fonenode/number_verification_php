@@ -1,7 +1,7 @@
 ##Number verification
 
 ###Objective
-Provide a simple number verification process by sending a PIN to the number via a voice call using the fonenode api.
+Provide a simple number verification process by sending a PIN to the number via a voice call using the fonenode api. A demo is available at [demo.fonenode.com/otp](http://demo.fonenode.com/otp)
 
 Here are the steps:
 
